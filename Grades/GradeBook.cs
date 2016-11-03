@@ -36,8 +36,22 @@ namespace Grades
             grades.Add(grade);
         }
 
-        public string Name; 
-
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                if (!String.IsNullOrEmpty(value))
+                {
+                    _name = value;
+                }
+                //basically, this property allows us to ignore the null value in Program.cs that we don't want. 
+            }
+        }
+        private string _name; 
         private List<float> grades;
     }
 }
