@@ -11,6 +11,7 @@ namespace Grades
 
         public GradeBook()
         {
+            _name = "Empty";
             grades = new List<float>();
         }
 
@@ -46,12 +47,26 @@ namespace Grades
             {
                 if (!String.IsNullOrEmpty(value))
                 {
+                    if(_name != value)
+                    {
+                        NameChangedEventArgs args = new NameChangedEventArgs();
+                        args.ExistingName = _name;
+                        args.NewName = value; 
+                        
+                        NameChanged(this, args);
+                        //'this' references the object we're inside of (gradebook) 
+                    }
                     _name = value;
                 }
+                
                 //basically, this property allows us to ignore the null value in Program.cs that we don't want. 
             }
         }
+
+        public event NameChangedDelegate NameChanged; 
+
         private string _name; 
         private List<float> grades;
+
     }
 }
