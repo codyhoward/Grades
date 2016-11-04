@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace Grades
 
         public GradeStatistics ComputeStatistics()
         {
-            GradeStatistics stats = new GradeStatistics(); 
+            GradeStatistics stats = new GradeStatistics();
 
             float sum = 0;
 
@@ -30,6 +31,14 @@ namespace Grades
             stats.AverageGrade = sum / grades.Count;
             return stats;
 
+        }
+        //"Iterating" vvvvvv
+        public void WriteGrades(TextWriter destination)
+        {
+            for (int i = grades.Count; i > 0; i--)
+            {
+                destination.WriteLine(grades[i - 1]);
+            }
         }
 
         public void AddGrade(float grade)
@@ -45,27 +54,29 @@ namespace Grades
             }
             set
             {
-                if (!String.IsNullOrEmpty(value))
+                if (String.IsNullOrEmpty(value))
                 {
-                    if(_name != value)
-                    {
-                        NameChangedEventArgs args = new NameChangedEventArgs();
-                        args.ExistingName = _name;
-                        args.NewName = value; 
-                        
-                        NameChanged(this, args);
-                        //'this' references the object we're inside of (gradebook) 
-                    }
-                    _name = value;
+                    throw new ArgumentException("Name cannot be null or empty");
                 }
-                
-                //basically, this property allows us to ignore the null value in Program.cs that we don't want. 
+                if (_name != value)
+                {
+                    NameChangedEventArgs args = new NameChangedEventArgs();
+                    args.ExistingName = _name;
+                    args.NewName = value;
+
+                    NameChanged(this, args);
+                    //'this' references the object we're inside of (gradebook) 
+                }
+                _name = value;
+
+
+
             }
         }
 
-        public event NameChangedDelegate NameChanged; 
+        public event NameChangedDelegate NameChanged;
 
-        private string _name; 
+        private string _name;
         private List<float> grades;
 
     }
