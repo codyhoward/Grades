@@ -13,17 +13,21 @@ namespace Grades
     {
         static void Main(string[] args)
         {
+            IGradeTracker book = CreateGradebook();
 
-            GradeBook book = new GradeBook();
-
-            GetBookName(book);
+            //GetBookName(book);
             AddGrades(book);
             SaveGrades(book);
             WriteResults(book);
 
         }
 
-        private static void GetBookName(GradeBook book)
+        private static IGradeTracker CreateGradebook()
+        {
+            return new ThrowAwayGradeBook();
+        }
+
+        private static void GetBookName(IGradeTracker book)
         {
             try
             {
@@ -45,23 +49,29 @@ namespace Grades
             //Will demonstrate use of throw exception
         }
 
-        private static void AddGrades(GradeBook book)
+        private static void AddGrades(IGradeTracker book)
         {
             book.AddGrade(91);
             book.AddGrade(89.5f);
             book.AddGrade(75);
         }
 
-        private static void WriteResults(GradeBook book)
+        private static void WriteResults(IGradeTracker book)
         {
             GradeStatistics stats = book.ComputeStatistics();
+
+            foreach (float grade in book)
+            {
+                Console.WriteLine(grade);
+            }
+
             WriteResult("Average", stats.AverageGrade);
             WriteResult("Highest", (int)stats.HighestGrade);
             WriteResult("Lowest", stats.LowestGrade);
             WriteResult(stats.Description, stats.LetterGrade);
         }
 
-        private static void SaveGrades(GradeBook book)
+        private static void SaveGrades(IGradeTracker book)
         {
             using (StreamWriter outputFile = File.CreateText("grades.txt"))
             {
