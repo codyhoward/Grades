@@ -23,30 +23,6 @@ namespace Grades
 
         }
 
-        private static void WriteResults(GradeBook book)
-        {
-            GradeStatistics stats = book.ComputeStatistics();
-            WriteResult("Average", stats.AverageGrade);
-            WriteResult("Highest", (int)stats.HighestGrade);
-            WriteResult("Lowest", stats.LowestGrade);
-            WriteResult(stats.Description, stats.LetterGrade);
-        }
-
-        private static void SaveGrades(GradeBook book)
-        {
-            using (StreamWriter outputFile = File.CreateText("grades.txt"))
-            {
-                book.WriteGrades(outputFile);
-            }
-        }
-
-        private static void AddGrades(GradeBook book)
-        {
-            book.AddGrade(91);
-            book.AddGrade(89.5f);
-            book.AddGrade(75);
-        }
-
         private static void GetBookName(GradeBook book)
         {
             try
@@ -68,6 +44,31 @@ namespace Grades
             //book.Name = null; 
             //Will demonstrate use of throw exception
         }
+
+        private static void AddGrades(GradeBook book)
+        {
+            book.AddGrade(91);
+            book.AddGrade(89.5f);
+            book.AddGrade(75);
+        }
+
+        private static void WriteResults(GradeBook book)
+        {
+            GradeStatistics stats = book.ComputeStatistics();
+            WriteResult("Average", stats.AverageGrade);
+            WriteResult("Highest", (int)stats.HighestGrade);
+            WriteResult("Lowest", stats.LowestGrade);
+            WriteResult(stats.Description, stats.LetterGrade);
+        }
+
+        private static void SaveGrades(GradeBook book)
+        {
+            using (StreamWriter outputFile = File.CreateText("grades.txt"))
+            {
+                book.WriteGrades(outputFile);
+            }
+        }
+
 
         static void WriteResult(string description, string result)
         {
